@@ -5,11 +5,10 @@ app = Flask(__name__)
 
 
 @app.route('/')
-@app.route('/index')
-def index():
+@app.route('/index/<title>')
+def index(title):
     param = dict()
-    param['username'] = "Степан"
-    param['title'] = 'Домашняя страница'
+    param['title'] = title
     return render_template('index.html', **param)
 
 
@@ -17,16 +16,27 @@ def index():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        return redirect('/success')
+        return redirect('/index')
     return render_template('login.html', title='Авторизация', form=form)
 
 
-@app.route('/success')
-def success():
-    param = dict()
-    param['username'] = "УСПЕХ!"
-    param['title'] = 'успех'
-    return render_template('index.html', **param)
+@app.route('/training/<prof>')
+def training(prof):
+    return render_template('training.html', prof=prof)
+
+
+@app.route('/list_prof/<type_list>')
+def list_prof(type_list):
+    prof = ["врач","инженер","строитель","фермер","космонавт"]
+    return render_template('list_prof.html', type=type_list, prof = prof)
+
+
+@app.route('/answer')
+@app.route('/auto_answer')
+def auto_answer():
+    params = dict()
+    params["name"] = "Марк"
+    return render_template("auto_answer.html", **params)
 
 
 if __name__ == '__main__':
